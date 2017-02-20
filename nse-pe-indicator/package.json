@@ -1,0 +1,24 @@
+{
+  "name": "nse-pe-indicator",
+  "version": "1.0.0",
+  "scripts": {
+    "typings":"typings install",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
+  },
+  "typings": "^0.7.9",
+  "devDependencies": {
+    "typescript": "^2.0.10",
+    "typings": "^2.1.0",
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-tslint": "^4.3.3",
+    "gulp-zip": "^3.2.0",
+    "ts-loader": "^0.8.1",
+    "tslint": "^3.6.0",   
+    "webpack": "^1.12.14",
+    "webpack-fail-plugin": "^1.0.4",
+    "webpack-stream": "^3.1.0"
+  },
+  "repository": {}
+}
