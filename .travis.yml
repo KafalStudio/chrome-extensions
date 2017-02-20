@@ -6,5 +6,5 @@ before_script:
   - cd nse-pe-indicator
   - npm install -g gulp
   - npm install
-  - npm install typings
+  - npm run typings
 script: gulp webpack
