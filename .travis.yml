@@ -5,4 +5,5 @@ node_js:
 before_script:
   - cd nse-pe-indicator
   - npm install -g gulp
+  - npm install
 script: gulp webpack
