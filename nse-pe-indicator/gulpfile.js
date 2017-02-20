@@ -5,7 +5,7 @@ var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
 var path = {
-  'src': ['./src/*.ts', './src/*.html' ],
+  'src': ['./src/*.ts' ],
   'lintSrc': './src/**/*.ts',
   'dest': './apps/js/',
   'appSrc': ['./apps/**/*', 'manifest.json'],
