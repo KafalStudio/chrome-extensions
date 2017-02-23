@@ -13,7 +13,7 @@
     "default_icon": "icon.png"
   },
   "icons": {
-    "128": "icon128.png"
+    "128": "icon.png"
   },
   "permissions": [
     "alarms",
