@@ -9,7 +9,7 @@ var path = {
   'lintSrc': './src/**/*.ts',
   'dest': './apps/js/',
   'appSrc': ['./apps/**/*', 'manifest.json'],
-  'appZip': 'apps.zip',
+  'appZip': '../binaries/nse-pe-indicator.zip',
   'appDest': './'
 }
 
