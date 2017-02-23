@@ -4,7 +4,8 @@
   "scripts": {
     "typings":"typings install",
     "tsc": "tsc",
-    "tsc:w": "tsc -w"
+    "tsc:w": "tsc -w",
+    "postinstall": "typings install"
   },
   "typings": "^0.7.9",
   "devDependencies": {
