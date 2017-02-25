@@ -3,7 +3,7 @@ language: node_js
 node_js:
   - 7.4.0
 before_script:
-  - cd nse-pe-indicator
+  - cd chrome\nse-pe-indicator
   - npm install -g gulp
   - npm install
   - npm run typings

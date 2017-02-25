@@ -1,0 +1,34 @@
+{
+  "author": "Sandeep Rawat",
+  "manifest_version": 2,
+  "version": "0.1",
+  "name": "NIFTY PE Watcher",
+  "short_name": "NSE PE Watcher",
+  "description": "Colors try to emulate excerpt from Dr. Bakshi's public article 'Keeping you out of trouble' Resolution 1",
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": {
+      "20": "icon.png",
+      "40": "icon.png"
+    },
+    "default_title": "NIFTY PE",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "icon.png",
+    "128": "icon.png",
+    "16": "icon.png"
+  },
+  "permissions": [
+    "alarms",
+    "tabs",
+    "webNavigation",
+    "https://craytheon.com/",
+    "background"
+  ]
+}

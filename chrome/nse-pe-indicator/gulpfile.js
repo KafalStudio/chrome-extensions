@@ -9,7 +9,7 @@ var path = {
   'lintSrc': './src/**/*.ts',
   'dest': './apps/js/',
   'appSrc': ['./apps/**/*', 'manifest.json'],
-  'appZip': '../binaries/nse-pe-indicator.zip',
+  'appZip': '../../binaries/nse-pe-indicator.zip',
   'appDest': './'
 }
 
@@ -38,3 +38,5 @@ gulp.task('zip', function(){
 });
 
 gulp.task('pack', ['webpack', 'zip']);
+
+gulp.task('default', ['pack']);

@@ -2,10 +2,10 @@
   "name": "nse-pe-indicator",
   "version": "1.0.0",
   "scripts": {
-    "typings":"typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "postinstall": "typings install"
+    "postinstall": "typings install",
+    "build":"npm install && gulp"
   },
   "typings": "^0.7.9",
   "devDependencies": {
