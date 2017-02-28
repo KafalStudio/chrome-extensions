@@ -25,10 +25,7 @@
     "16": "icon.png"
   },
   "permissions": [
-    "alarms",
-    "tabs",
     "webNavigation",
-    "https://craytheon.com/",
     "background"
   ]
 }
