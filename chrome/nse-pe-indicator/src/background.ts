@@ -1,18 +1,57 @@
 
-import {Config} from "./Config";
+import { Config } from "./Config";
 
 let config = new Config();
 
+execute();
 
-var xhttp = new XMLHttpRequest();
-xhttp.open("GET", config.url);
-
-xhttp.onreadystatechange = function () {
-  if (xhttp.readyState == 4) {
-    var peDetails : any[] = JSON.parse(xhttp.responseText);
-    var peRatio:number = peDetails.filter(pe => pe.source == 'nseLoader')[0].pe;
-    chrome.browserAction.setBadgeText({ text: peRatio.toString() });
-    chrome.browserAction.setBadgeBackgroundColor({ color: config.getColor(peRatio)});
-  }
+function execute() {
+  hookHandler();
+  setDefault();
+  sendRequest();
 }
-xhttp.send();
+
+function hookHandler() {
+  chrome.storage.onChanged.addListener(function (changes, area) {
+    let peratio: number = changes["pe"].newValue;
+    setBadge(peratio);
+  });
+}
+
+function setDefault() {
+  chrome.storage.local.get(function (items) {
+    if (items && items["pe"]) {
+      var peratio: number = items["pe"];
+      setBadge(peratio);
+    }
+  });
+}
+
+function sendRequest() {
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", config.url);
+
+  xhttp.onreadystatechange = function () {
+    if (xhttp.readyState == 4) {
+      console.log(xhttp.responseText);
+      var peDetails: any[] = JSON.parse(xhttp.responseText);
+      var peRatio: number = peDetails.filter(pe => pe.source == 'nseLoader')[0].pe;
+      chrome.storage.local.set({ "pe": peRatio }, function () {
+        if (chrome.runtime.lastError) {
+          console.log("Error while saving pe data" + chrome.runtime.lastError);
+        }
+      })
+      // setBadge(peRatio);
+    }
+  }
+  xhttp.send();
+}
+
+function setBadge(peratio: number) {
+  if (peratio == 0) {
+    return;
+  }
+  chrome.browserAction.setBadgeText({ text: peratio.toString() });
+  chrome.browserAction.setBadgeBackgroundColor({ color: config.getColor(peratio) });
+}
