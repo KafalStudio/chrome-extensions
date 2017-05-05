@@ -30,7 +30,7 @@ function setDefault() {
 function sendRequest() {
 
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", config.url);
+  xhttp.open("GET", config.backupUrl);
 
   xhttp.onreadystatechange = function () {
     if (xhttp.readyState == 4) {
