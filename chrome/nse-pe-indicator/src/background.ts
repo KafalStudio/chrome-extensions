@@ -13,8 +13,10 @@ function execute() {
 
 function hookHandler() {
   chrome.storage.onChanged.addListener(function (changes, area) {
-    let peratio: number = changes["pe"].newValue;
-    setBadge(peratio);
+    if (changes["pe"]) {
+      let peratio: number = changes["pe"].newValue;
+      setBadge(peratio);
+    }
   });
 }
 
@@ -34,9 +36,8 @@ function sendRequest() {
 
   xhttp.onreadystatechange = function () {
     if (xhttp.readyState == 4) {
-      console.log(xhttp.responseText);
       var peDetails: any[] = JSON.parse(xhttp.responseText);
-      var peRatio: number = peDetails.filter(pe => pe.source == 'nseLoader')[0].pe;
+      var peRatio: number = peDetails.filter(pe => pe.RowKey == 'nseLoader')[0].PE;
       chrome.storage.local.set({ "pe": peRatio }, function () {
         if (chrome.runtime.lastError) {
           console.log("Error while saving pe data" + chrome.runtime.lastError);

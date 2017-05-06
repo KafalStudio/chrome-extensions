@@ -3,7 +3,10 @@ declare var Highcharts: any;
 export class Config {
   public url: string = "https://nifty.azurewebsites.net/chrome";
   public backupUrl: string = "https://nifty.azurewebsites.net/api/pe";
-  
+  public historicalPeUrl:string = "https://nifty.azurewebsites.net/api/hpe";
+
+  // https://equityfriend.com/administrator/components/com_stockdatlod/tables/incoming/pe/dataPE.txt
+
   public querySelector: string = "div #contact > div > div > div > b";
 
   public getColor(peratio: number): string {
@@ -31,15 +34,21 @@ export class Config {
   public getHighChartOptions() {
     return {
       chart: {
-        renderTo: 'conta',
+        renderTo: 'nifty_pe_chart',
+        type: "line"        
       },
+
+      plotOptions: {
+            series: {
+            }
+        },
 
       navigator: {
         enabled: true
       },
 
       scrollbar: {
-        enabled: true
+        enabled: false
       },
 
       credits: {
@@ -47,7 +56,6 @@ export class Config {
       },
 
       rangeSelector: {
-        selected: 1,
         enabled: false
       },
 
@@ -59,7 +67,6 @@ export class Config {
       },
       xAxis: {
         type: 'datetime',
-
       },
 
       yAxis: [{ // Primary yAxis
@@ -73,7 +80,7 @@ export class Config {
           style: {
             color: Highcharts.getOptions().colors[1]
           }
-        },
+        },        
 
         plotLines: [{
           color: 'green', // Color value
@@ -145,7 +152,7 @@ export class Config {
             color: 'DarkRed',
           }],
 
-        data: null
+        data: null,
       }]
     };
   }
