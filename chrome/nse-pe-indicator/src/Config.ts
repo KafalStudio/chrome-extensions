@@ -1,9 +1,17 @@
 declare var Highcharts: any;
 
 export class Config {
+  public currentVersion = "0.1";
   public url: string = "https://nifty.azurewebsites.net/chrome";
   public backupUrl: string = "https://nifty.azurewebsites.net/api/pe";
-  public historicalPeUrl:string = "https://nifty.azurewebsites.net/api/hpe";
+  public historicalPeUrl: string = "https://nifty.azurewebsites.net/api/hpe";
+  public chartElement: string = "nifty_pe_chart";
+
+  public historicalPeSetting: string = "historicalPe";
+  public todaysPeSetting: string = "pe";
+  public lastFullDownloadTimeSetting: string = 'lastFullDownload';
+  public initializationTodaySetting: string = "initialized";
+  public versionSetting: string = "lastVersion";
 
   // https://equityfriend.com/administrator/components/com_stockdatlod/tables/incoming/pe/dataPE.txt
 
@@ -34,14 +42,14 @@ export class Config {
   public getHighChartOptions() {
     return {
       chart: {
-        renderTo: 'nifty_pe_chart',
-        type: "line"        
+        renderTo: this.chartElement,
+        type: "line"
       },
 
       plotOptions: {
-            series: {
-            }
-        },
+        series: {
+        }
+      },
 
       navigator: {
         enabled: true
@@ -80,7 +88,7 @@ export class Config {
           style: {
             color: Highcharts.getOptions().colors[1]
           }
-        },        
+        },
 
         plotLines: [{
           color: 'green', // Color value
@@ -116,7 +124,7 @@ export class Config {
             y: 0
           },
           from: 24,
-          to:28
+          to: 28
         }]
 
       }],
@@ -156,4 +164,34 @@ export class Config {
       }]
     };
   }
+
+  public getToday(): number {
+    var today = new Date();
+    today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    today.setTime(today.getTime() - today.getTimezoneOffset() * 60000);
+    return today.getTime();
+  }
+
+  public IsLastDownloadAtLeastADayOld(lastDlDate: Date): boolean {
+    lastDlDate.setHours(lastDlDate.getHours() + 24);
+    return new Date() > lastDlDate;
+  }
+
+  public isDataTooOld(lastDlDate: Date): boolean {
+    lastDlDate.setDate(lastDlDate.getDate() + 14);
+    return new Date(this.getToday()) > lastDlDate;
+  }
+
+  public IsWeekend(date: Date): boolean {
+    return date.getDay() % 6 == 0;
+  }
+
+
+  public getEpoch(date: string) {
+    var dt = new Date(date);
+    dt.setTime(dt.getTime() - dt.getTimezoneOffset() * 60000);
+    return dt.getTime();
+  }
 }
+
+

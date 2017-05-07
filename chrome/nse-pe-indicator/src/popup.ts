@@ -4,9 +4,15 @@ declare var $: any;
 import { Observable } from "rxjs";
 import { Config } from "./Config";
 
-hookPostInitialize(postInitialize);
+let config = new Config()
 
-createChartFromCache(markInitializationComplete);
+
+waitAndExecute(function () {
+  hookPostInitialize(postInitialize);
+  createChartFromCache(markInitializationComplete);
+}, () => {
+  document.getElementById(config.chartElement).innerHTML = "Oops, try after a minute or so";
+});
 
 function postInitialize() {
   continueProcessing(OnCacheMiss);
@@ -15,25 +21,37 @@ function postInitialize() {
 function OnCacheMiss() {
   pullDataFromRemote((data) => {
     cacheData(data);
-
-    document.getElementById("nifty_pe_chart").innerHTML = "";
-
     createChart(data);
+  });
+}
+
+function waitAndExecute(success: () => void, prematureExecutionEventHandler?: () => void) {
+  chrome.storage.local.get(function (items) {
+    if (!items || !items[config.versionSetting] || items[config.versionSetting] == config.currentVersion) {
+      //First time user
+      success();
+    } else {
+      //Wait for background to complete upgrade
+      if (prematureExecutionEventHandler) {
+        prematureExecutionEventHandler();
+      }
+    }
   });
 }
 
 function continueProcessing(cacheMisscallback: () => void) {
   chrome.storage.local.get(function (items) {
-    if (!items || !items["historicalPe"]) {
+    if (!items || !items[config.historicalPeSetting]) {
       cacheMisscallback();
     }
     else {
-      if (items['lastFullDownload']) {
-        if (isDataTooOld(new Date(items['lastFullDownload']))) {
+      if (items[config.lastFullDownloadTimeSetting]) {
+        if (config.isDataTooOld(new Date(items[config.lastFullDownloadTimeSetting]))) {
           cacheMisscallback();
         }
-        var historicalPe: [number, number][] = items["historicalPe"];
-        if (!IsLastTradingDayPeAvailable(historicalPe) && IsLastDownloadAtLeastADayOld(new Date(items['lastFullDownload']))) {
+        var historicalPe: [number, number][] = items[config.historicalPeSetting];
+        if (!IsLastTradingDayPeAvailable(historicalPe)
+          && config.IsLastDownloadAtLeastADayOld(new Date(items[config.lastFullDownloadTimeSetting]))) {
           cacheMisscallback();
         }
       }
@@ -45,34 +63,20 @@ function continueProcessing(cacheMisscallback: () => void) {
 }
 
 function IsLastTradingDayPeAvailable(historicalPe: [number, number][]): boolean {
-  var lastTradingDay = new Date(getToday());
-  if(lastTradingDay.getDay() == 6)
-  {
-     lastTradingDay.setDate(lastTradingDay.getDate() - 1);
+  var lastTradingDay = new Date(config.getToday());
+  if (lastTradingDay.getDay() == 6) {
+    lastTradingDay.setDate(lastTradingDay.getDate() - 1);
   }
-  else if(lastTradingDay.getDay() == 0){
+  else if (lastTradingDay.getDay() == 0) {
     lastTradingDay.setDate(lastTradingDay.getDate() - 2);
   }
   return historicalPe.map(a => a[0]).indexOf(lastTradingDay.getTime()) > 0;
 }
 
-function IsLastDownloadAtLeastADayOld(lastDlDate: Date): boolean {
-  lastDlDate.setHours(lastDlDate.getHours() + 24);
-  return new Date() > lastDlDate;
-}
-
-function isDataTooOld(lastDlDate: Date): boolean {
-  lastDlDate.setDate(lastDlDate.getDate() + 14);
-  return new Date(getToday()) > lastDlDate;
-}
-
-function IsWeekend(date:Date) : boolean {
-  return date.getDay()%6==0;
-}
 
 function hookPostInitialize(callback: () => void): void {
   chrome.storage.onChanged.addListener(function (changes, area) {
-    if (changes["initialized"]) {
+    if (changes[config.initializationTodaySetting]) {
       callback();
     }
   });
@@ -87,8 +91,8 @@ function markInitializationComplete() {
 
 function createChartFromCache(postCacheLookup: () => void): void {
   chrome.storage.local.get(function (items) {
-    if (items && items["historicalPe"]) {
-      var historicalPe: [[number, number]] = items["historicalPe"];
+    if (items && items[config.historicalPeSetting]) {
+      var historicalPe: [[number, number]] = items[config.historicalPeSetting];
       createChart(historicalPe);
     }
     postCacheLookup();
@@ -98,7 +102,7 @@ function createChartFromCache(postCacheLookup: () => void): void {
 function pullDataFromRemote(success: (data: [number, number][]) => void) {
 
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", new Config().historicalPeUrl);
+  xhttp.open("GET", config.historicalPeUrl);
 
   xhttp.onreadystatechange = function () {
     if (xhttp.readyState == 4) {
@@ -110,9 +114,9 @@ function pullDataFromRemote(success: (data: [number, number][]) => void) {
 }
 
 function createChart(data) {
-  var options = new Config().getHighChartOptions();
+  var options = config.getHighChartOptions();
   options.series[0].data = transformData(data);
-  $("#nifty_pe_chart").highcharts("StockChart", options);
+  $("#" + config.chartElement).highcharts("StockChart", options);
 }
 
 function transformData(data: [number, number][]): [number, number][] {
@@ -132,13 +136,5 @@ function cacheData(data) {
       console.log("Error while saving lastFullDownload " + chrome.runtime.lastError);
     }
   });
-
-}
-
-function getToday(): number {
-  var today = new Date();
-  today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  today.setTime(today.getTime() - today.getTimezoneOffset() * 60000);
-  return today.getTime();
 }
 
