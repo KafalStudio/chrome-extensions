@@ -1,10 +1,10 @@
 {
-  "author" : "Sandeep Rawat",
+  "author" : "Kafal Studio®",
   "manifest_version": 2,  
-  "version": "0.1",
+  "version": "0.2.1",
   "name": "NIFTY PE Watcher",
-  "short_name": "NSE PE Watcher",
-  "description": "Colors try to emulate excerpt from Dr. Bakshi's public article 'Keeping you out of trouble' Resolution 1",
+  "short_name": "NIFTY PE Watcher",
+  "description": "Keep updated with NIFTY Price to Earning Ratio",
   "background": {
     "scripts": ["js/background.js"]
   },
@@ -16,9 +16,6 @@
     "128": "icon.png"
   },
   "permissions": [
-    "alarms",
-    "tabs",
-    "webNavigation",
     "storage",
     "https://nifty.azurewebsites.net/"
   ]

@@ -38,7 +38,7 @@ function hookHandler() {
   chrome.storage.onChanged.addListener(function (changes, area) {
     if (changes[config.todaysPeSetting]) {
       let peratio: PeDetails = changes[config.todaysPeSetting].newValue;
-      setBadge(peratio.PE);
+      setBadge(peratio);
     }
   });
 }
@@ -48,7 +48,7 @@ function setDefault(callback: () => void) {
     if (items && items[config.todaysPeSetting]) {
       //Set default value      
       var peratio: PeDetails = items[config.todaysPeSetting];
-      setBadge(peratio.PE);
+      setBadge(peratio);
       if (!IsDataCurrent(peratio)) {
         callback();
       }
@@ -120,11 +120,12 @@ function insertPeIntoHistoricalPe(historicalPe: [number, number][]) {
 
 }
 
-function setBadge(peratio: number) {
-  if (peratio == 0) {
+function setBadge(peratio: PeDetails) {
+  if (peratio.PE == 0) {
     return;
   }
-  chrome.browserAction.setBadgeText({ text: peratio.toString() });
-  chrome.browserAction.setBadgeBackgroundColor({ color: config.getColor(peratio) });
+  chrome.browserAction.setTitle( {title: peratio.Date});
+  chrome.browserAction.setBadgeText({ text: peratio.PE.toString() });
+  chrome.browserAction.setBadgeBackgroundColor({ color: config.getColor(peratio.PE) });
 }
 
