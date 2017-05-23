@@ -81,6 +81,10 @@ function sendRequest() {
       var peDetails: PeDetails[] = JSON.parse(xhttp.responseText);
       var nseLoader = peDetails.filter(pe => pe.RowKey == 'nseLoader')[0];
       var peRatio = nseLoader.PE;
+      //Skip updating cache and keep the old value so we have some valid value to show
+      if(isNaN(peRatio)){
+        return;
+      }
       chrome.storage.local.set(
         {
           "pe": nseLoader
@@ -91,7 +95,6 @@ function sendRequest() {
         });
 
       updateHistoricalPe(nseLoader);
-      // setBadge(peRatio);
     }
   }
   xhttp.send();
@@ -112,12 +115,16 @@ function updateHistoricalPe(nseLoader: PeDetails) {
 
 function insertPeIntoHistoricalPe(historicalPe: [number, number][]) {
 
-  chrome.storage.local.set({ "historicalPe": historicalPe }, function () {
+  var dataToSave = transformData(historicalPe);
+  chrome.storage.local.set({ "historicalPe": dataToSave }, function () {
     if (chrome.runtime.lastError) {
       console.log("Error while updating historical PE" + chrome.runtime.lastError);
     }
   });
+}
 
+function transformData(data: [number, number][]): [number, number][] {
+  return data.filter(a => !isNaN(a[0]) && !isNaN(a[1])).sort((a, b) => a[0] - b[0]);
 }
 
 function setBadge(peratio: PeDetails) {

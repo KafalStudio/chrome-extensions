@@ -1,7 +1,7 @@
 {
   "author" : "Kafal Studio®",
   "manifest_version": 2,  
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "NIFTY PE Watcher",
   "short_name": "NIFTY PE Watcher",
   "description": "Keep updated with NIFTY Price to Earning Ratio",

@@ -120,7 +120,7 @@ function createChart(data) {
 }
 
 function transformData(data: [number, number][]): [number, number][] {
-  return data.filter(a => !isNaN(a[0])).sort((a, b) => a[0] - b[0]);
+  return data.filter(a => !isNaN(a[0]) && !isNaN(a[1])).sort((a, b) => a[0] - b[0]);
 }
 
 function cacheData(data) {
