@@ -1,6 +1,10 @@
 
 import { Config } from "./Config";
 import { PeDetails } from "./peDetails";
+import { ConfigureDownload } from "./downloadConfigure";
+
+
+new ConfigureDownload().configure();
 
 let config = new Config();
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Options</title>
+  <style>
+    
+    div.setting-wrapper {
+      margin: 5px;
+    }
+    label, input {
+      margin: 5px;
+    }
+    div.action button{
+      margin-left: 5px;
+    }
+
+.status {
+  color: red;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="action" class="action">
+    <button id="btnSave" >Save</button>
+    <button id="btnClearAll">Clear All</button>
+    
+  </div>
+  <div class="setting-wrapper">
+
+    <input type="checkbox" id="shouldOverrideDownloadLocation" />
+    <label for="shouldOverrideDownloadLocation">Override download folder for screener</label>
+  </div>
+
+  <div class="setting-wrapper">
+    <input type="text" value="screener/" id="downloadLocation" disabled/>
+    <label for="downloadLocation">Custom download location (subdirectory inside default)</label>
+  </div>
+
+  <div id="status" class="status"></div>
+  
+
+  <script src="js/options.js"></script>
+</body>
+
+</html>

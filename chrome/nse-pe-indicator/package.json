@@ -5,7 +5,9 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "postinstall": "typings install",
-    "build": "npm install && gulp"
+    "build": "npm install && gulp",
+    "release": "npm install && gulp release"
+    
   },
   "typings": "^0.7.9",
   "devDependencies": {

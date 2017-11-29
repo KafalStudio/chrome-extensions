@@ -5,7 +5,8 @@ module.exports = {
   color: true,
   entry: {
     background: "./src/background.ts",
-    popup: "./src/popup.ts"
+    popup: "./src/popup.ts",
+    options : "./src/options.ts"
     // add more entries
   },
   output: {

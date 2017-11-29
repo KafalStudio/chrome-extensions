@@ -1,7 +1,7 @@
 {
   "author" : "Kafal Studio®",
   "manifest_version": 2,  
-  "version": "0.2.2",
+  "version": "0.2.3",
   "name": "NIFTY PE Watcher",
   "short_name": "NIFTY PE Watcher",
   "description": "Keep updated with NIFTY Price to Earning Ratio",
@@ -17,6 +17,12 @@
   },
   "permissions": [
     "storage",
-    "https://nifty.azurewebsites.net/"
-  ]
+    "downloads",    
+    "https://nifty.azurewebsites.net/",
+    "https://*.moneycontrol.com/"    
+  ],
+  "options_ui" : {
+    "page" : "options.html",
+    "chrome_style": true
+  }
 }

@@ -39,4 +39,6 @@ gulp.task('zip', function(){
 
 gulp.task('pack', ['webpack', 'zip']);
 
-gulp.task('default', ['pack']);
+gulp.task('default', ['webpack']);
+gulp.task('release', ['pack']);
+
