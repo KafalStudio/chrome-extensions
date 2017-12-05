@@ -19,7 +19,13 @@
     "storage",
     "downloads",    
     "https://nifty.azurewebsites.net/",
-    "https://*.moneycontrol.com/"    
+    "*://*.moneycontrol.com/*"    
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.moneycontrol.com/*"],
+      "js": ["js/moneycontrol.js"]
+    }
   ],
   "options_ui" : {
     "page" : "options.html",

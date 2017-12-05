@@ -1,14 +1,15 @@
 import { userOptions, getDefaults } from "./userOptions";
+import { IdConstants } from "./settingsConstants";
 export class Options {
 
   hookEvents() {
     this.restoreOptions();
-    document.getElementById("btnSave").addEventListener("click", () => {
+    document.getElementById(IdConstants.btnSave).addEventListener("click", () => {
       this.saveOptions();
     }
     );
 
-    document.getElementById("btnClearAll").addEventListener("click", () => {
+    document.getElementById(IdConstants.btnClearAll).addEventListener("click", () => {
       this.clearAll();
     }
     );
@@ -17,28 +18,22 @@ export class Options {
   restoreOptions() {
     var opts = getDefaults();
     chrome.storage.sync.get(opts, (items: userOptions) => {
-      (<HTMLButtonElement>document.getElementById("btnSave")).disabled = false;
-      this.setSettingOnPage('shouldOverrideDownloadLocation', items.option_shouldOverrideDownloadLocation);
+      (<HTMLButtonElement>document.getElementById(IdConstants.btnSave)).disabled = false;
+      this.setSettingOnPage(IdConstants.shouldOverrideDownloadLocation, items.option_shouldOverrideDownloadLocation);
+      this.setSettingOnPage(IdConstants.enableMoneycontrol, items.option_enableMoneycontrol);
+      
     });
   }
-  setSettingOnPage(id: string, value: boolean) {
-    if (value) {
-      (<HTMLInputElement>document.getElementById(id)).checked = value;
-    }
-    else {
-      (<HTMLInputElement>document.getElementById(id)).checked = (<HTMLInputElement>document.getElementById(id)).defaultChecked;
-    }
-  }
 
-  getSettingValueFromPage(id: string): boolean {
-    return (<HTMLInputElement>document.getElementById(id)).checked;
-  }
 
   saveOptions() {
-    var shouldOverrideDownloadLocation = this.getSettingValueFromPage("shouldOverrideDownloadLocation");
+    var shouldOverrideDownloadLocation = this.getSettingValueFromPage(IdConstants.shouldOverrideDownloadLocation);
+    var enableMoneycontrol = this.getSettingValueFromPage(IdConstants.enableMoneycontrol);
+    
 
     var opts: userOptions = {
-      option_shouldOverrideDownloadLocation: shouldOverrideDownloadLocation
+      option_shouldOverrideDownloadLocation: shouldOverrideDownloadLocation,
+      option_enableMoneycontrol : enableMoneycontrol
     }
 
     chrome.storage.sync.set(opts, this.done);
@@ -57,6 +52,19 @@ export class Options {
       this.done();
       this.restoreOptions();
     });
+  }
+
+  setSettingOnPage(id: string, value: boolean) {
+    if (value) {
+      (<HTMLInputElement>document.getElementById(id)).checked = value;
+    }
+    else {
+      (<HTMLInputElement>document.getElementById(id)).checked = (<HTMLInputElement>document.getElementById(id)).defaultChecked;
+    }
+  }
+
+  getSettingValueFromPage(id: string): boolean {
+    return (<HTMLInputElement>document.getElementById(id)).checked;
   }
 }
 

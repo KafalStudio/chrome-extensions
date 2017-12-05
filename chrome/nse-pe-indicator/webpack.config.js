@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     background: "./src/background.ts",
     popup: "./src/popup.ts",
-    options : "./src/options.ts"
+    options : "./src/options.ts",
+    moneycontrol: "./src/content/moneycontrol.ts"
     // add more entries
   },
   output: {
