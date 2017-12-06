@@ -6,10 +6,13 @@ console.log(document.URL);
 
 
 class moneycontrol {
+
   processDiv(arg0: HTMLDivElement) {
     let stockId = arg0.id.substr(6);
     if (stockId) {
       console.log(stockId);
+    }else{
+      return;
     }
     var tdElement = <HTMLTableDataCellElement>arg0.parentElement;
     var rowElement = <HTMLTableRowElement>tdElement.parentElement;
@@ -18,6 +21,22 @@ class moneycontrol {
     // tdElement.insertAdjacentElement("afterend", childToAdd);
     var datacell = rowElement.insertCell(1);
     datacell.appendChild(childToAdd);
+    // also change column span
+    var detCell = <HTMLTableDataCellElement>document.getElementById("det_1_" + stockId);
+    detCell.colSpan = detCell.colSpan + 1;
+
+    this.pullStockDetailAndUpdate(childToAdd, stockId);
+  }
+
+  pullStockDetailAndUpdate(element: HTMLDivElement, stockId: string) {
+
+    var uri = `http://appfeeds.moneycontrol.com/jsonapi/stocks/overview&format=json&sc_id=${stockId}&ex=N&type=consolidated`;
+
+    fetch(uri).then(res => res.json()).then(res => res["NSE"]["p_e"]).then(pe => {
+      element.innerText = pe;
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   start() {
