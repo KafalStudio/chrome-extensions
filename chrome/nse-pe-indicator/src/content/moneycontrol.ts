@@ -11,7 +11,7 @@ class moneycontrol {
     let stockId = arg0.id.substr(6);
     if (stockId) {
       console.log(stockId);
-    }else{
+    } else {
       return;
     }
     var tdElement = <HTMLTableDataCellElement>arg0.parentElement;
@@ -33,10 +33,22 @@ class moneycontrol {
     var uri = `http://appfeeds.moneycontrol.com/jsonapi/stocks/overview&format=json&sc_id=${stockId}&ex=N&type=consolidated`;
 
     fetch(uri).then(res => res.json()).then(res => res["NSE"]["p_e"]).then(pe => {
-      element.innerText = pe;
+      if (pe) {
+        return pe;
+      }
+      else {
+        return fetch(`http://appfeeds.moneycontrol.com/jsonapi/stocks/overview&format=json&sc_id=${stockId}&ex=B&type=consolidated`)
+          .then(res => res.json()).then(res => res["BSE"]["p_e"])
+      }
+
+    }).then(pe => {
+      element.innerText = pe || "";
     }).catch(err => {
       console.log(err);
     });
+
+
+    // take care of undefined and when stock is only BSE listed ex=B
   }
 
   start() {
